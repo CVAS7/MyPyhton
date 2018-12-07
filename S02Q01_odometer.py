@@ -23,5 +23,8 @@ FuelUsed = fueluseage (fuelstart,fuelend)
 print "Fuel used in your trip is:", FuelUsed 
 Mileage = mileage1(Dist1,FuelUsed)
 print "Your car mileage is:", Mileage
-stops = 560/Mileage
+#stops = 560/Mileage
+NumberOfLiterRequired = 560/Mileage
+CarTankCapacity = 45
+stops = NumberOfLiterRequired/CarTankCapacity
 print "Number of stops one should make for refuelling while travelling from Bangalore to Goa is ", stops
