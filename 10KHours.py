@@ -16,7 +16,7 @@ def calc(a,b):
     return (div1,mod1)
 def calc2(c,d):
     div2 = c/d
-    mod2 = div2%d
+    mod2 = c%d
     return (div2,mod2)
 
 
