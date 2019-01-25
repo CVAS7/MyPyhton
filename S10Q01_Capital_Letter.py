@@ -13,3 +13,4 @@ for i in xrange(len(x)):
     else:
         print "line:",i,"Does not begin with a capital letter that is",str(x[i][:1])
 FH.close()
+
