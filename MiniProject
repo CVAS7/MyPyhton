@@ -1,0 +1,328 @@
+===========================================================
+For Manual Testing: works with Python 2.6 and 2.7
+which include Bonus points
+===========================================================
+[suresh@localhost Exam01]$ cat MiniProject.py
+#Lucknumber = raw_input("Enter Password:")
+import sys
+#Lucknumber = 12
+import random
+from random import randint
+import datetime
+import time
+
+now = datetime.datetime.now()
+day = now.day
+
+global condtion
+global count
+count,condition = 1,0
+
+
+def stopwatch(seconds):
+    start = time.time()
+    time.clock()
+    elapsed = 1
+    while elapsed < seconds-1:
+        elapsed = time.time() - start
+        print "Seconds to wait for next chance",int(seconds - elapsed)
+        time.sleep(1)
+
+def luckynumber(day):
+    if day > 25:
+        login = random.randint(1,day)
+    else:
+        login = random.randint(1,25)
+    return(login)
+
+
+
+def getpasscode(passcode,condition):
+    global condtion
+    global count
+    global Lucknumber
+    global tmp
+    if count < 4 or condition == 3:
+        try:
+            passcode = int(raw_input("Enter Password:"))
+        except:
+            print "Please Enter Login number"
+            stopwatch(6)
+            sys.exit()
+
+            
+#        print 'tmp,passcode',tmp,passcode
+        if passcode == tmp:
+            print "Your previour attempt and this attempt is the same\nLogin Failed!!!\nTry again later"
+            sys.exit()
+        check(Lucknumber,passcode)
+        tmp = passcode
+
+def check(Lucknumber,passcode):
+    global condition
+    global count
+    if passcode == Lucknumber :
+        print "Welcome !!!"
+        sys.exit()
+    elif passcode < Lucknumber-2 and count < 3:
+        print "invaild passcode"
+    elif  passcode > Lucknumber+2 and count < 3:
+        print "INVAILD PASSCODE"
+    elif passcode >= Lucknumber-2 and passcode <= Lucknumber+2 and count < 4:
+        print "InVaIlD PaSsCoDe"
+        condition = 3
+    elif count == 3:
+        print "Login Failed!!!"
+        sys.exit()
+    elif count == 4:
+        print "Login Failed!!!"
+        sys.exit()
+    else:
+        print "Login Failed!!!"
+# Main Here
+Lucknumber=luckynumber(day)
+print 'day',day
+#Lucknumber=12
+print 'Lucknumber',Lucknumber
+try:
+    passcode = int(raw_input("Enter Password:"))
+#    tmp = passcode
+#    check(Lucknumber,passcode)
+except:
+    print "Please Enter Login number"
+    stopwatch(6)
+    sys.exit()
+
+#print 'count',count
+
+tmp = passcode
+check(Lucknumber,passcode)
+while count < 5:
+    getpasscode(passcode,condition)
+    count += 1
+#    print 'count',count
+    if count == 5:
+        print "Login Failed"
+
+
+
+===========================================================
+For Testing 10 TestCases Automation:
+===========================================================
+
+Input is ini file - Test.ini
+
+[suresh@localhost Exam01]$ cat Test.ini
+[TC]
+
+Cases = TC1,TC2,TC3,TC4,TC5,TC6,TC7,TC8,TC9,TC10
+
+Login = 12,12,12,1,26,1,10,12,12,26
+
+Input = 20:5:10:11:12,2:22:15:14:13,21:4:16:7,5:21:12:14,26,1,10,12,-1:-2:-5:11:13,-1:-2:-5:26 
+#Input = 20:5:10:12,2:22:15:14:13,21:4:16:7,5:21:12:14,26,1,10,12,str,-1:-2:-5:11:12,-1:-2:-5:26 
+
+Expected = INVAILD PASSCODE:invaild passcode:InVaLiD PaSsCoDe:InVaLiD PaSsCoDe:Welcome !!!,invaild passcode:INVAILD PASSCODE:INVAILD PASSCODE:InVaLiD PaSsCoDe:Login FAILED !!!,INVAILD PASSCODE:invaild passcode:INVAILD PASSCODE:Login FAILED !!!,INVAILD PASSCODE:INVAILD PASSCODE:INVAILD PASSCODE:Login FAILED !!!,Welcome !!!,Welcome !!!,Welcome !!!,Welcome !!!,invaild passcode:invaild passcode:invaild passcode:InVaLiD PaSsCoDe:Login FAILED !!!,invaild passcode:invaild passcode:invaild passcode:Welcome !!! 
+
+
+===========================================================
+Modified script for Automation testing 
+===========================================================
+
+[suresh@localhost Exam01]$ cat MiniProject_Testing.py
+import sys
+import random
+from random import randint
+import datetime
+import time
+import ConfigParser
+
+now = datetime.datetime.now()
+day = now.day
+
+def stopwatch(seconds):
+    start = time.time()
+    time.clock()
+    elapsed = 1
+    while elapsed < seconds-1:
+        elapsed = time.time() - start
+        print "Seconds to wait for next chance",int(seconds - elapsed)
+        time.sleep(1)
+
+def luckynumber(day):
+    if day > 25:
+        login = random.randint(1,day)
+    else:
+        login = random.randint(1,25)
+    return(login)
+def getpasscode(cases,login,condition,count,tmp,inputs,expected):
+    if count < 5 or condition == 3:
+        try:
+            inputs1 = inputs.split(':')
+     #       print 'tmp',tmp
+            passcode = int(inputs1[count])
+            print "Getting input try login as",passcode
+      #      print "inputs -",count,passcode
+            time.sleep(1)
+#           passcode = int(raw_input("Enter Password:"))
+        except:
+            print "Please Enter Login number"
+            stopwatch(6)
+       #     print 'tmp in except',tmp
+        if passcode == tmp:
+            print "Your previour attempt and this attempt is the same\nLogin Failed!!!\nTry again later"
+            sys.exit()
+        tmp = passcode
+        results = check(cases,login,condition,passcode,count,tmp,expected)
+        return results,condition,tmp,expected
+def check(cases,Lucknumber,condition,passcode,count,tmp,expected):
+    expected = expected.split(':')
+    if passcode == Lucknumber :
+#        print "Welcome !!!"
+        results = "Welcome !!!"
+#        print 'results',results
+        resultslist.append(results)
+#        print 'resultslist',resultslist
+#        print 'expected',expected
+        dif = [i for i in resultslist + expected if i not in resultslist or i not in expected]
+        if dif == []:
+            print "Your Test case",cases,"is passed"
+        elif dif != []:
+            print "Your Test case",cases,"is Failed"
+
+        #sys.exit()
+    elif passcode < Lucknumber-2 and count < 3:
+#       print "invaild passcode"
+        results = "invaild passcode"
+        resultslist.append(results)
+#       print 'resultslist',resultslist
+
+    elif  passcode > Lucknumber+2 and count < 3:
+#        print "INVAILD PASSCODE"
+        results = "INVAILD PASSCODE"
+        resultslist.append(results)
+#        print 'resultslist',resultslist
+
+    elif passcode >= Lucknumber-2 and passcode <= Lucknumber+2 and count < 4:
+#        print "InVaLiD PaSsCoDe"
+        results = "InVaLiD PaSsCoDe"
+        resultslist.append(results)
+        condition = 3
+#        print 'resultslist',resultslist
+
+    elif count == 3  and condition !=3 :
+#        print "Login FAILED !!! for count = 3"
+        results = "Login FAILED !!!"
+#        print 'results',results
+        resultslist.append(results)
+#        print 'resultslist',resultslist
+#        print 'expected',expected
+        dif = [i for i in resultslist + expected if i not in resultslist or i not in expected]
+        if dif == []:
+            print "Your Test case",cases,"is passed"
+        elif dif != []:
+            print "Your Test case",cases,"is Failed"
+#        sys.exit()
+    elif count == 4:
+#        print "Login FAILED !!!"
+        results = 'Login FAILED !!!'
+#        print 'results',results
+        resultslist.append(results)
+#        print 'resultslist',resultslist
+#        print 'expected',expected
+        dif = [i for i in resultslist + expected if i not in resultslist or i not in expected]
+        if dif == []:
+            print "Your Test case",cases,"is passed"
+        elif dif != []:
+            print "Your Test case",cases,"is Failed"
+#        sys.exit()
+    else:
+#        print "Login FAILED !!!"
+        results = 'Login FAILED !!!'
+        resultslist.append(results)
+#        print 'results',results
+#        print 'resultslist',resultslist
+#    print 'condition in check functon',condition
+    return results,condition,tmp,expected
+#Lucknumber=12
+def getconfig():
+    Config = ConfigParser.ConfigParser()
+    Config.read('Test.ini')
+    cases = Config.get('TC', 'Cases' ).split(',')
+    login = Config.get('TC', 'Login' ).split(',')
+    inputs = Config.get('TC', 'Input' ).split(',')
+    expected = Config.get('TC', 'Expected').split(',')
+#    Lucknumber = int(login[0])
+#    print "-"*25 
+#    print 'cases',cases
+#    print 'login',login
+#    print 'inputs',inputs
+#    print 'expected',expected
+#    print "-"*25 
+#    onein = inputs[0].split(':')
+#    oneexpected = expected[8].split(':')
+#    times = len(cases)
+#   print 'times',times
+#   print 'expected',oneexpected 
+    return cases,login,inputs,expected
+# Main Here
+
+def main(cases,login,inputs,expected):
+#    print cases
+#    print login
+#    print inputs
+#    print expected
+    Lucknumber=luckynumber(day)
+    Lucknumber=12
+    condition = 0
+    count = 0
+    tmp = 0
+#    print "Lucknumber", Lucknumber
+#    print 'len(inputs)',len((inputs)[count])
+    in1 = inputs.split(":")
+    while count < 5 and count < len(inputs.split(':')):
+        results,condition,tmp,expected = getpasscode(cases,login,condition,count,tmp,inputs,expected)
+#        print expected
+#        expected = expected.split(":")
+#        print 'results',results
+#        print '*'*25 
+#        print 'condition in return value',condition
+#        print 'tmp',tmp
+#        print '*'*25 
+        count += 1
+#        print 'count',count
+        if results == "Login FAILED !!!" or "Welcome !!!":
+            pass
+        elif count == 5:
+#            print "Login FAILED !!!"
+            results = 'Login FAILED !!!'
+            resultslist.append(results)
+#    print 'HERE'
+    print 'Actual  ',resultslist
+    expected = expected.split(":")
+    print 'expected',expected
+    dif = [i for i in resultslist + expected if i not in resultslist or i not in expected]
+    #print 'dif',dif
+#    if dif == []:
+#        print "Your Test case",cases,"is passed"
+#    elif dif != []:
+#        print "Your Test case",cases,"is Failed"
+#        print "HERE"
+    
+
+cases,login,inputs,expected=getconfig()
+for i in xrange(0,len(cases)):
+    print "-"*50 
+    print 'Executing Test Case Name:',cases[i]
+    print 'login',login[i]
+#    print 'inputs ',inputs[i]
+   # print expected[i]
+    resultslist = []
+    main(cases[i],int(login[i]),inputs[i],expected[i])
+
+
+
+
+
+
+
