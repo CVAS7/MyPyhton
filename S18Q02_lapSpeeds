@@ -1,0 +1,76 @@
+[suresh@localhost Practice]$ cat S18Q02_lapSpeeds.py
+"""
+The lap speeds recorded for
+Michael Schumacher,
+Montoya Juan-Pablo and
+Barrichello Rubens in a F1 race are
+
+( 258.626, 255.931, 258.998, 255.195 ),
+(258.680, 257.925, 259.828, 257.422) and
+(258.405, 256.700, 260.395) respectively
+
+- Find the fastest lap for each driver
+- Find the average speed for each driver
+- Which driver has recorded the fastest lap ?
+- Which driver has the fastest lap average ?
+
+- Print the data in the following formats
+
+"""
+import numpy as np
+Michael_Schumacher = {}
+Montoya_Juan_Pablo = {}
+Barrichello_Ruben = {}
+speed = {}
+l1 = ( 258.626, 255.931, 258.998, 255.195 )
+l2 = (258.680, 257.925, 259.828, 257.422)
+l3 = (258.405, 256.700, 260.395)
+for i in xrange(0,len(l1)):
+    Michael_Schumacher[i+1] = l1[i]
+#print Michael_Schumacher
+key_max1 = min(Michael_Schumacher.keys(), key=(lambda k: Michael_Schumacher[k]))
+#print 'key_max',key_max
+print "Fastest lap for Michael_Schumacher is",key_max1,'in',Michael_Schumacher[key_max1],'seconds'
+speed['Michael'] = Michael_Schumacher[key_max1]
+for i in xrange(0,len(l2)):
+    Montoya_Juan_Pablo[i+1] = l2[i]
+#print Montoya_Juan_Pablo
+key_max2 = min(Montoya_Juan_Pablo.keys(), key=(lambda k: Montoya_Juan_Pablo[k]))
+#print 'key_max',key_max
+print "Fastest lap for Montoya_Juan_Pablo is",key_max2,'in',Montoya_Juan_Pablo[key_max2],'seconds'
+speed['Montoya'] = Montoya_Juan_Pablo[key_max2]
+for i in xrange(0,len(l3)):
+    Barrichello_Ruben[i+1] = l3[i]
+#print Barrichello_Ruben
+key_max3 = min(Barrichello_Ruben.keys(), key=(lambda k: Barrichello_Ruben[k]))
+#print 'key_max',key_max
+print "Fastest lap for Barrichello_Ruben is",key_max3,'in',Barrichello_Ruben[key_max3],'seconds'
+print 'Average speed of Michael_Schumacher',np.array(list(Michael_Schumacher.values())).mean()
+speed['Ruben'] = Barrichello_Ruben[key_max3]
+print 'Average speed of Montoya_Juan_Pablo is',np.array(list(Montoya_Juan_Pablo.values())).mean()
+print 'Average speed of Barrichello_Ruben is',np.array(list(Barrichello_Ruben.values())).mean()
+print "Printing in given format 1:"
+print 'Race    Michael  Ruben    Montoya'
+mlen =  max(len(Michael_Schumacher.keys()),len(Montoya_Juan_Pablo.keys()),len(Barrichello_Ruben.keys()))
+for i in xrange(1,mlen+1):
+    if i <= len(Michael_Schumacher.keys()):
+        a = Michael_Schumacher[i]
+    else:
+        a = 'NA'
+    if i <= len(Barrichello_Ruben.keys()):
+        b = Barrichello_Ruben[i]
+    else:
+        b = 'NA'
+    if i <= len(Montoya_Juan_Pablo.keys()):
+        c = Montoya_Juan_Pablo[i]
+    else:
+        c = 'NA'
+
+    print i,'     ',a,' '*(7-len(str(a))),b,' '*(7-len(str(b))),c
+print "Print in given format 2:"
+print "Rank Driver Speed"
+speeds = sorted(speed.iteritems(),key = lambda x : x[1])
+for i in xrange(0,len(speeds)):
+    print i+1,speeds[i][0],' '*(7-len(speeds[1][0])),speeds[i][1]
+
+
