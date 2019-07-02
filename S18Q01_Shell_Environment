@@ -1,0 +1,53 @@
+[suresh@localhost Practice]$ cat S18Q01_Shell_Environment.py
+"""
+S18Q01
+Shell Environment variables are shown below.
+- Use keys() and items() methods to print the
+names of all the environment variables
+
+- Which environment variables has the longest name ?
+
+- Print the names of all the environment variables in a sorted order
+
+- Print the names and values of environment variables in the following format :
+
+- NAME                     = value1
+- MORE_NAME        = longer_value2
+- ANOTHER_NAME = val
+- HOME                    = some_value_3
+"""
+import os
+import time
+#print(os.environ)
+env = os.environ
+#print env.keys()
+namelen,valuelen,k1 = {},{},0
+print '-'*50
+for i in env.keys():
+#    print i,len(i)
+    print i
+    namelen[i] = len(i)
+    time.sleep(1)
+key_max = max(namelen.keys(), key=(lambda k: namelen[k]))
+key_min = min(namelen.keys(), key=(lambda k: namelen[k]))
+for j in env.values():
+    valuelen[j] = len(j)
+#print valuelen
+val_max = max(valuelen.keys(),key=(lambda k: valuelen[k]))
+val_min = min(valuelen.keys(),key=(lambda k: valuelen[k]))
+#print key_max,key_min 
+time.sleep(1)
+print '-'*50
+print 'Longest by name is ',key_max
+print '-'*50
+time.sleep(1)
+print 'Longest by value is ',val_max
+print '-'*50
+print 'Sorted by Keys'
+for i in sorted (env.keys()):
+    print i
+    time.sleep(1)
+print 'names and values of environment variables in given format'
+for i in sorted (env.keys()):
+    print i,' '*(24-len(i)),'=',env[i]
+    time.sleep(1)
